@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Search } from 'lucide-react';
+import { Search, MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useLocation } from '../contexts/LocationContext';
@@ -8,7 +8,7 @@ import { toast } from '@/hooks/use-toast';
 
 const LocationSearch = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const { setLocation, setIsLoading } = useLocation();
+  const { setLocation, setIsLoading, getUserLocation, isGettingLocation } = useLocation();
 
   const handleSearch = async () => {
     if (!searchTerm.trim()) {
@@ -23,7 +23,6 @@ const LocationSearch = () => {
     setIsLoading(true);
     
     try {
-      // Using OpenStreetMap Nominatim API for geocoding (free, no API key required)
       const response = await fetch(
         `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(searchTerm)}&limit=1`
       );
@@ -77,7 +76,7 @@ const LocationSearch = () => {
   return (
     <div className="max-w-2xl mx-auto">
       <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20">
-        <div className="flex gap-2">
+        <div className="flex gap-2 mb-4">
           <div className="flex-1">
             <Input
               type="text"
@@ -94,6 +93,18 @@ const LocationSearch = () => {
           >
             <Search className="w-4 h-4 mr-2" />
             Search
+          </Button>
+        </div>
+        
+        <div className="flex justify-center">
+          <Button
+            onClick={getUserLocation}
+            disabled={isGettingLocation}
+            variant="outline"
+            className="bg-white/10 border-white/30 text-white hover:bg-white/20"
+          >
+            <MapPin className="w-4 h-4 mr-2" />
+            {isGettingLocation ? 'Getting Location...' : 'Use My Location'}
           </Button>
         </div>
       </div>

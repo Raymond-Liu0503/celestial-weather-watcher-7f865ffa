@@ -3,6 +3,9 @@ import React from 'react';
 import LocationSearch from '../components/LocationSearch';
 import WeatherCard from '../components/WeatherCard';
 import MoonPhaseCard from '../components/MoonPhaseCard';
+import ForecastCard from '../components/ForecastCard';
+import StargazingCard from '../components/StargazingCard';
+import AstrophotographyCard from '../components/AstrophotographyCard';
 import { LocationProvider } from '../contexts/LocationContext';
 
 const Index = () => {
@@ -16,7 +19,7 @@ const Index = () => {
               Celestial Dashboard
             </h1>
             <p className="text-lg text-gray-300 max-w-2xl mx-auto">
-              Discover weather conditions and lunar cycles for any location on Earth
+              Discover weather conditions, lunar cycles, and astrophotography opportunities for any location on Earth
             </p>
           </div>
 
@@ -26,9 +29,15 @@ const Index = () => {
           </div>
 
           {/* Dashboard Cards */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 max-w-7xl mx-auto">
+            {/* Current Conditions Row */}
             <WeatherCard />
             <MoonPhaseCard />
+            <StargazingCard />
+            
+            {/* Forecast and Planning Row */}
+            <ForecastCard />
+            <AstrophotographyCard />
           </div>
         </div>
       </div>
