@@ -1,6 +1,5 @@
-
 import React, { useEffect, useState } from 'react';
-import { Cloud, CloudRain, Sun, Thermometer } from 'lucide-react';
+import { Cloud, CloudRain, Sun, Thermometer, Clock } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useLocation } from '../contexts/LocationContext';
 import { toast } from '@/hooks/use-toast';
@@ -11,6 +10,12 @@ interface WeatherData {
   cloudCover: number;
   humidity: number;
   windSpeed: number;
+  hourlyData: Array<{
+    time: string;
+    temperature: number;
+    cloudCover: number;
+    humidity: number;
+  }>;
 }
 
 const WeatherCard = () => {
@@ -30,8 +35,6 @@ const WeatherCard = () => {
     setLoading(true);
     
     try {
-      // Using OpenWeatherMap-like mock data for demonstration
-      // In a real app, you'd use an actual weather API
       const response = await fetch(
         `https://api.open-meteo.com/v1/forecast?latitude=${location.lat}&longitude=${location.lon}&current_weather=true&hourly=temperature_2m,relativehumidity_2m,cloudcover,windspeed_10m&timezone=auto`
       );
@@ -42,12 +45,32 @@ const WeatherCard = () => {
       
       const data = await response.json();
       
+      // Get current hour and next 12 hours for night viewing
+      const currentHour = new Date().getHours();
+      const nightHours = [];
+      
+      for (let i = 0; i < 12; i++) {
+        const hourIndex = (currentHour + i) % 24;
+        if (hourIndex < data.hourly.time.length) {
+          nightHours.push({
+            time: new Date(data.hourly.time[hourIndex]).toLocaleTimeString('en-US', { 
+              hour: 'numeric', 
+              hour12: true 
+            }),
+            temperature: Math.round(data.hourly.temperature_2m[hourIndex]),
+            cloudCover: data.hourly.cloudcover[hourIndex] || 0,
+            humidity: data.hourly.relativehumidity_2m[hourIndex] || 0,
+          });
+        }
+      }
+      
       setWeatherData({
         temperature: Math.round(data.current_weather.temperature),
         description: getWeatherDescription(data.current_weather.weathercode),
         cloudCover: data.hourly.cloudcover[0] || 0,
         humidity: data.hourly.relativehumidity_2m[0] || 0,
         windSpeed: data.current_weather.windspeed,
+        hourlyData: nightHours,
       });
       
     } catch (error) {
@@ -123,7 +146,7 @@ const WeatherCard = () => {
             </div>
           </div>
         ) : weatherData ? (
-          <div className="space-y-4">
+          <div className="space-y-6">
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2">
                 <Thermometer className="w-5 h-5 text-red-400" />
@@ -133,7 +156,7 @@ const WeatherCard = () => {
             
             <p className="text-lg text-gray-300 capitalize">{weatherData.description}</p>
             
-            <div className="grid grid-cols-2 gap-4 mt-6">
+            <div className="grid grid-cols-2 gap-4">
               <div className="bg-white/5 rounded-lg p-4">
                 <h4 className="text-sm text-gray-400 mb-1">Cloud Cover</h4>
                 <div className="flex items-center gap-2">
@@ -147,6 +170,25 @@ const WeatherCard = () => {
                 <span className="text-xl font-semibold">{Math.round(weatherData.humidity)}%</span>
               </div>
             </div>
+
+            {/* Hourly Weather for Tonight */}
+            <div className="bg-white/5 rounded-lg p-4">
+              <h4 className="text-sm text-gray-400 mb-3 flex items-center gap-2">
+                <Clock className="w-4 h-4" />
+                Tonight's Hourly Conditions
+              </h4>
+              <div className="grid grid-cols-2 gap-2 text-xs">
+                {weatherData.hourlyData.slice(0, 6).map((hour, index) => (
+                  <div key={index} className="flex justify-between items-center py-1">
+                    <span className="text-gray-300">{hour.time}</span>
+                    <div className="flex items-center gap-2">
+                      <span>{hour.temperature}°</span>
+                      <span className="text-gray-400">{hour.cloudCover}%☁</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         ) : (
           <p className="text-gray-300 text-center py-4">No weather data available</p>
@@ -154,6 +196,36 @@ const WeatherCard = () => {
       </CardContent>
     </Card>
   );
+};
+
+const getWeatherDescription = (code: number) => {
+  const descriptions: { [key: number]: string } = {
+    0: 'Clear sky',
+    1: 'Mainly clear',
+    2: 'Partly cloudy',
+    3: 'Overcast',
+    45: 'Foggy',
+    48: 'Depositing rime fog',
+    51: 'Light drizzle',
+    53: 'Moderate drizzle',
+    55: 'Dense drizzle',
+    61: 'Slight rain',
+    63: 'Moderate rain',
+    65: 'Heavy rain',
+  };
+  return descriptions[code] || 'Unknown';
+};
+
+const getWeatherIcon = () => {
+  if (!weatherData) return <Cloud className="w-8 h-8" />;
+    
+  if (weatherData.cloudCover > 70) {
+    return <CloudRain className="w-8 h-8 text-gray-400" />;
+  } else if (weatherData.cloudCover > 30) {
+    return <Cloud className="w-8 h-8 text-gray-300" />;
+  } else {
+    return <Sun className="w-8 h-8 text-yellow-400" />;
+  }
 };
 
 export default WeatherCard;

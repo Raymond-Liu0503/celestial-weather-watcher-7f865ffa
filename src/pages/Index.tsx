@@ -6,6 +6,7 @@ import MoonPhaseCard from '../components/MoonPhaseCard';
 import ForecastCard from '../components/ForecastCard';
 import StargazingCard from '../components/StargazingCard';
 import AstrophotographyCard from '../components/AstrophotographyCard';
+import PhotoAnalysisCard from '../components/PhotoAnalysisCard';
 import { LocationProvider } from '../contexts/LocationContext';
 
 const Index = () => {
@@ -38,6 +39,7 @@ const Index = () => {
             {/* Forecast and Planning Row */}
             <ForecastCard />
             <AstrophotographyCard />
+            <PhotoAnalysisCard />
           </div>
         </div>
       </div>
