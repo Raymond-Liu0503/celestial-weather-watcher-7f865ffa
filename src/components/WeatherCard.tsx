@@ -198,34 +198,4 @@ const WeatherCard = () => {
   );
 };
 
-const getWeatherDescription = (code: number) => {
-  const descriptions: { [key: number]: string } = {
-    0: 'Clear sky',
-    1: 'Mainly clear',
-    2: 'Partly cloudy',
-    3: 'Overcast',
-    45: 'Foggy',
-    48: 'Depositing rime fog',
-    51: 'Light drizzle',
-    53: 'Moderate drizzle',
-    55: 'Dense drizzle',
-    61: 'Slight rain',
-    63: 'Moderate rain',
-    65: 'Heavy rain',
-  };
-  return descriptions[code] || 'Unknown';
-};
-
-const getWeatherIcon = () => {
-  if (!weatherData) return <Cloud className="w-8 h-8" />;
-    
-  if (weatherData.cloudCover > 70) {
-    return <CloudRain className="w-8 h-8 text-gray-400" />;
-  } else if (weatherData.cloudCover > 30) {
-    return <Cloud className="w-8 h-8 text-gray-300" />;
-  } else {
-    return <Sun className="w-8 h-8 text-yellow-400" />;
-  }
-};
-
 export default WeatherCard;
