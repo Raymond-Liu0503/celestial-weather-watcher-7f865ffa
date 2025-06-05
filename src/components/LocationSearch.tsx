@@ -52,7 +52,7 @@ const LocationSearch = () => {
       
       toast({
         title: "Location found!",
-        description: `Now showing data for ${locationData.name}`,
+        description: `Now showing celestial data for ${locationData.name}`,
       });
       
     } catch (error) {
@@ -75,21 +75,21 @@ const LocationSearch = () => {
 
   return (
     <div className="max-w-2xl mx-auto">
-      <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20">
+      <div className="bg-slate-900/30 backdrop-blur-md rounded-2xl p-6 border border-slate-700/50 shadow-2xl">
         <div className="flex gap-2 mb-4">
           <div className="flex-1">
             <Input
               type="text"
-              placeholder="Enter city name or address..."
+              placeholder="Search any location on Earth..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               onKeyPress={handleKeyPress}
-              className="bg-white/20 border-white/30 text-white placeholder:text-gray-300 focus:border-blue-400 focus:ring-blue-400"
+              className="bg-slate-800/50 border-slate-600 text-white placeholder:text-slate-400 focus:border-indigo-400 focus:ring-indigo-400/50 h-12 text-base"
             />
           </div>
           <Button
             onClick={handleSearch}
-            className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-6"
+            className="bg-gradient-to-r from-indigo-600 to-purple-700 hover:from-indigo-700 hover:to-purple-800 text-white px-6 h-12 shadow-lg"
           >
             <Search className="w-4 h-4 mr-2" />
             Search
@@ -101,10 +101,10 @@ const LocationSearch = () => {
             onClick={getUserLocation}
             disabled={isGettingLocation}
             variant="outline"
-            className="bg-white/10 border-white/30 text-white hover:bg-white/20"
+            className="bg-slate-800/30 border-slate-600 text-slate-300 hover:bg-slate-700/50 hover:text-white transition-all duration-200"
           >
             <MapPin className="w-4 h-4 mr-2" />
-            {isGettingLocation ? 'Getting Location...' : 'Use My Location'}
+            {isGettingLocation ? 'Getting Location...' : 'Use My Current Location'}
           </Button>
         </div>
       </div>
