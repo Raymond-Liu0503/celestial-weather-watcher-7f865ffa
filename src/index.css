@@ -36,47 +36,32 @@
     --radius: 0.5rem;
 
     --sidebar-background: 0 0% 98%;
-
     --sidebar-foreground: 240 5.3% 26.1%;
-
     --sidebar-primary: 240 5.9% 10%;
-
     --sidebar-primary-foreground: 0 0% 98%;
-
     --sidebar-accent: 240 4.8% 95.9%;
-
     --sidebar-accent-foreground: 240 5.9% 10%;
-
     --sidebar-border: 220 13% 91%;
-
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
   .dark {
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
-
     --card: 222.2 84% 4.9%;
     --card-foreground: 210 40% 98%;
-
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
-
     --primary: 210 40% 98%;
     --primary-foreground: 222.2 47.4% 11.2%;
-
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
-
     --muted: 217.2 32.6% 17.5%;
     --muted-foreground: 215 20.2% 65.1%;
-
     --accent: 217.2 32.6% 17.5%;
     --accent-foreground: 210 40% 98%;
-
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
-
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
@@ -101,7 +86,7 @@
   }
 }
 
-/* Animated stars background */
+/* Enhanced animated stars background */
 .stars {
   position: absolute;
   top: 0;
@@ -113,46 +98,170 @@
 
 .stars-1 {
   background-image: 
-    radial-gradient(2px 2px at 20px 30px, #eee, transparent),
-    radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.8), transparent),
-    radial-gradient(1px 1px at 90px 40px, #eee, transparent),
-    radial-gradient(1px 1px at 130px 80px, rgba(255,255,255,0.6), transparent),
-    radial-gradient(2px 2px at 160px 30px, #eee, transparent);
+    radial-gradient(3px 3px at 20px 30px, rgba(255,255,255,0.9), transparent),
+    radial-gradient(2px 2px at 40px 70px, rgba(147,197,253,0.8), transparent),
+    radial-gradient(1px 1px at 90px 40px, rgba(255,255,255,0.7), transparent),
+    radial-gradient(1px 1px at 130px 80px, rgba(196,181,253,0.6), transparent),
+    radial-gradient(2px 2px at 160px 30px, rgba(255,255,255,0.8), transparent);
   background-repeat: repeat;
   background-size: 200px 100px;
-  animation: sparkle 20s linear infinite;
+  animation: sparkle 25s linear infinite;
 }
 
 .stars-2 {
   background-image: 
-    radial-gradient(1px 1px at 40px 60px, rgba(255,255,255,0.7), transparent),
+    radial-gradient(2px 2px at 40px 60px, rgba(147,197,253,0.7), transparent),
     radial-gradient(1px 1px at 120px 25px, rgba(255,255,255,0.5), transparent),
-    radial-gradient(1px 1px at 190px 90px, #eee, transparent);
+    radial-gradient(1px 1px at 190px 90px, rgba(196,181,253,0.8), transparent);
   background-repeat: repeat;
   background-size: 250px 120px;
-  animation: sparkle 25s linear infinite;
+  animation: sparkle 30s linear infinite;
 }
 
 .stars-3 {
   background-image: 
     radial-gradient(1px 1px at 60px 20px, rgba(255,255,255,0.4), transparent),
-    radial-gradient(1px 1px at 170px 70px, rgba(255,255,255,0.6), transparent),
-    radial-gradient(1px 1px at 110px 100px, rgba(255,255,255,0.3), transparent);
+    radial-gradient(2px 2px at 170px 70px, rgba(147,197,253,0.6), transparent),
+    radial-gradient(1px 1px at 110px 100px, rgba(196,181,253,0.3), transparent);
   background-repeat: repeat;
   background-size: 300px 150px;
-  animation: sparkle 30s linear infinite;
+  animation: sparkle 35s linear infinite;
+}
+
+.shooting-stars {
+  background-image: 
+    radial-gradient(1px 2px at 10% 20%, rgba(255,255,255,0.8), transparent),
+    radial-gradient(1px 2px at 90% 80%, rgba(147,197,253,0.6), transparent);
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  animation: shooting 8s ease-in-out infinite;
 }
 
 @keyframes sparkle {
   0% {
     opacity: 0.3;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
+  }
+  25% {
+    opacity: 0.8;
+    transform: translateY(-25px) scale(1.1);
   }
   50% {
-    opacity: 0.8;
+    opacity: 0.6;
+    transform: translateY(-50px) scale(1);
+  }
+  75% {
+    opacity: 0.9;
+    transform: translateY(-75px) scale(1.05);
   }
   100% {
     opacity: 0.3;
-    transform: translateY(-100px);
+    transform: translateY(-100px) scale(1);
   }
+}
+
+@keyframes shooting {
+  0% {
+    opacity: 0;
+    transform: translateX(-100px) translateY(100px);
+  }
+  10% {
+    opacity: 1;
+    transform: translateX(0) translateY(0);
+  }
+  20% {
+    opacity: 0;
+    transform: translateX(100px) translateY(-100px);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(100px) translateY(-100px);
+  }
+}
+
+/* Enhanced animation utilities */
+@layer utilities {
+  .animate-fade-in {
+    animation: fadeIn 0.8s ease-out forwards;
+  }
+  
+  .animate-scale-in {
+    animation: scaleIn 0.6s ease-out forwards;
+  }
+  
+  .animation-delay-100 {
+    animation-delay: 0.1s;
+  }
+  
+  .animation-delay-200 {
+    animation-delay: 0.2s;
+  }
+  
+  .animation-delay-400 {
+    animation-delay: 0.4s;
+  }
+  
+  .animation-delay-600 {
+    animation-delay: 0.6s;
+  }
+  
+  .animation-delay-800 {
+    animation-delay: 0.8s;
+  }
+  
+  .animation-delay-1000 {
+    animation-delay: 1.0s;
+  }
+  
+  .animation-delay-1200 {
+    animation-delay: 1.2s;
+  }
+  
+  .animation-delay-1400 {
+    animation-delay: 1.4s;
+  }
+  
+  .animation-delay-1600 {
+    animation-delay: 1.6s;
+  }
+  
+  .animation-delay-1800 {
+    animation-delay: 1.8s;
+  }
+  
+  .animation-delay-2000 {
+    animation-delay: 2.0s;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Enhanced card hover effects */
+.card-hover {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-hover:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }

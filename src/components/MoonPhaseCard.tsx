@@ -8,7 +8,6 @@ interface MoonData {
   phase: string;
   illumination: number;
   age: number;
-  distance: number;
 }
 
 const MoonPhaseCard = () => {
@@ -79,7 +78,6 @@ const MoonPhaseCard = () => {
       phase,
       illumination: Math.round(Math.max(0, Math.min(100, illumination))),
       age: Math.round(age),
-      distance: 384400, // Average distance to moon in km
     };
   };
 
@@ -100,7 +98,7 @@ const MoonPhaseCard = () => {
 
   if (!location) {
     return (
-      <Card className="bg-white/10 backdrop-blur-md border-white/20 text-white">
+      <Card className="bg-white/10 backdrop-blur-md border-white/20 text-white card-hover">
         <CardContent className="p-8 text-center">
           <Moon className="w-16 h-16 mx-auto mb-4 text-gray-400" />
           <p className="text-gray-300">Search for a location to view lunar data</p>
@@ -110,7 +108,7 @@ const MoonPhaseCard = () => {
   }
 
   return (
-    <Card className="bg-white/10 backdrop-blur-md border-white/20 text-white hover:bg-white/15 transition-all duration-300">
+    <Card className="bg-white/10 backdrop-blur-md border-white/20 text-white hover:bg-white/15 transition-all duration-300 card-hover">
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-xl">
           {getMoonIcon()}
@@ -134,7 +132,7 @@ const MoonPhaseCard = () => {
               <div className="relative w-24 h-24 mx-auto mb-4">
                 <div className="w-24 h-24 rounded-full bg-gray-600 relative overflow-hidden">
                   <div 
-                    className="absolute top-0 right-0 h-full bg-yellow-200 rounded-full transition-all duration-500"
+                    className="absolute top-0 right-0 h-full bg-gradient-to-l from-yellow-200 to-yellow-100 rounded-full transition-all duration-500"
                     style={{ width: `${moonData.illumination}%` }}
                   />
                 </div>
@@ -143,20 +141,15 @@ const MoonPhaseCard = () => {
             </div>
             
             <div className="grid grid-cols-2 gap-4">
-              <div className="bg-white/5 rounded-lg p-4 text-center">
+              <div className="bg-white/5 rounded-lg p-4 text-center hover:bg-white/10 transition-colors">
                 <h4 className="text-sm text-gray-400 mb-1">Illumination</h4>
                 <span className="text-xl font-semibold">{moonData.illumination}%</span>
               </div>
               
-              <div className="bg-white/5 rounded-lg p-4 text-center">
+              <div className="bg-white/5 rounded-lg p-4 text-center hover:bg-white/10 transition-colors">
                 <h4 className="text-sm text-gray-400 mb-1">Age</h4>
                 <span className="text-xl font-semibold">{moonData.age} days</span>
               </div>
-            </div>
-            
-            <div className="bg-white/5 rounded-lg p-4 text-center">
-              <h4 className="text-sm text-gray-400 mb-1">Distance from Earth</h4>
-              <span className="text-lg font-semibold">{moonData.distance.toLocaleString()} km</span>
             </div>
           </div>
         ) : (
