@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import LocationSearch from '../components/LocationSearch';
 import WeatherCard from '../components/WeatherCard';
@@ -30,7 +29,7 @@ const Index = () => {
         <div className="container mx-auto px-4 py-8 relative z-10">
           {/* Enhanced Header with animations */}
           <div className="text-center mb-8 animate-fade-in">
-            <h1 className="text-4xl md:text-6xl font-bold text-white mb-4 bg-gradient-to-r from-indigo-300 via-purple-300 to-cyan-300 bg-clip-text text-transparent animate-pulse">
+            <h1 className="text-4xl md:text-6xl font-bold text-white mb-4 bg-gradient-to-r from-indigo-300 via-purple-300 to-cyan-300 bg-clip-text text-transparent">
               ✨ Celestial Observatory
             </h1>
             <p className="text-lg text-slate-300 max-w-2xl mx-auto leading-relaxed animate-fade-in animation-delay-200">
