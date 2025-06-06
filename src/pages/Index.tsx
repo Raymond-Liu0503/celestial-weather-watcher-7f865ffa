@@ -38,13 +38,13 @@ const Index = () => {
               and capturing the cosmos through your lens
             </p>
             <div className="flex items-center justify-center gap-2 mt-4 text-slate-400 text-sm animate-fade-in animation-delay-400">
-              <span className="animate-bounce">🌌</span>
+              <span>🌌</span>
               <span>Real-time conditions</span>
               <span>•</span>
-              <span className="animate-bounce animation-delay-100">🔭</span>
+              <span>🔭</span>
               <span>AI photo analysis</span>
               <span>•</span>
-              <span className="animate-bounce animation-delay-200">⭐</span>
+              <span>⭐</span>
               <span>Stargazing forecasts</span>
             </div>
           </div>
