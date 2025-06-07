@@ -30,7 +30,7 @@ const ForecastCard = () => {
     
     try {
       const response = await fetch(
-        `https://api.open-meteo.com/v1/forecast?latitude=${location.lat}&longitude=${location.lon}&daily=temperature_2m_max,temperature_2m_min,cloudcover_mean&timezone=auto&forecast_days=7`
+        `https://api.open-meteo.com/v1/forecast?latitude=${location.lat}&longitude=${location.lon}&daily=temperature_2m_max,temperature_2m_min,cloudcover_mean&timezone=auto&forecast_days=5`
       );
       
       if (!response.ok) {
@@ -40,7 +40,7 @@ const ForecastCard = () => {
       const data = await response.json();
       
       const forecastData = data.daily.time.map((date: string, index: number) => ({
-        date: new Date(date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }),
+        date: new Date(date).toLocaleDateString('en-US', { weekday: 'short' }),
         maxTemp: Math.round(data.daily.temperature_2m_max[index]),
         minTemp: Math.round(data.daily.temperature_2m_min[index]),
         cloudCover: data.daily.cloudcover_mean[index] || 0,
@@ -65,20 +65,20 @@ const ForecastCard = () => {
 
   const getWeatherIcon = (cloudCover: number) => {
     if (cloudCover < 20) {
-      return <Sun className="w-6 h-6 text-yellow-400" />;
+      return <Sun className="w-4 h-4 text-yellow-400" />;
     } else if (cloudCover < 50) {
-      return <Cloud className="w-6 h-6 text-gray-300" />;
+      return <Cloud className="w-4 h-4 text-gray-300" />;
     } else {
-      return <CloudRain className="w-6 h-6 text-gray-400" />;
+      return <CloudRain className="w-4 h-4 text-gray-400" />;
     }
   };
 
   if (!location) {
     return (
       <Card className="bg-white/10 backdrop-blur-md border-white/20 text-white">
-        <CardContent className="p-8 text-center">
-          <Calendar className="w-16 h-16 mx-auto mb-4 text-gray-400" />
-          <p className="text-gray-300">Search for a location to view forecast</p>
+        <CardContent className="p-4 text-center flex flex-col items-center justify-center">
+          <Calendar className="w-8 h-8 mb-2 text-gray-400" />
+          <p className="text-gray-300 text-sm">Search for location</p>
         </CardContent>
       </Card>
     );
@@ -86,34 +86,33 @@ const ForecastCard = () => {
 
   return (
     <Card className="bg-white/10 backdrop-blur-md border-white/20 text-white hover:bg-white/15 transition-all duration-300">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-xl">
-          <Calendar className="w-8 h-8 text-blue-400" />
-          7-Day Forecast
+      <CardHeader className="pb-2">
+        <CardTitle className="flex items-center gap-2 text-lg">
+          <Calendar className="w-5 h-5 text-blue-400" />
+          5-Day Forecast
         </CardTitle>
-        <p className="text-gray-300 text-sm">{location.name}</p>
+        <p className="text-gray-300 text-xs truncate">{location.name}</p>
       </CardHeader>
-      <CardContent>
+      <CardContent className="pb-4">
         {loading ? (
-          <div className="space-y-4 animate-pulse">
-            {[...Array(7)].map((_, i) => (
-              <div key={i} className="h-12 bg-white/20 rounded"></div>
+          <div className="space-y-2 animate-pulse">
+            {[...Array(5)].map((_, i) => (
+              <div key={i} className="h-8 bg-white/20 rounded"></div>
             ))}
           </div>
         ) : (
-          <div className="space-y-3">
+          <div className="space-y-1">
             {forecast.map((day, index) => (
-              <div key={index} className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
-                <div className="flex items-center gap-3">
+              <div key={index} className="flex items-center justify-between p-2 bg-white/5 rounded text-xs">
+                <div className="flex items-center gap-2">
                   {getWeatherIcon(day.cloudCover)}
                   <div>
                     <p className="font-medium">{day.date}</p>
-                    <p className="text-sm text-gray-400">{day.description}</p>
+                    <p className="text-gray-400 text-xs">{day.cloudCover}%</p>
                   </div>
                 </div>
                 <div className="text-right">
-                  <p className="text-lg font-semibold">{day.maxTemp}°/{day.minTemp}°</p>
-                  <p className="text-sm text-gray-400">{day.cloudCover}% clouds</p>
+                  <p className="font-semibold">{day.maxTemp}°/{day.minTemp}°</p>
                 </div>
               </div>
             ))}
