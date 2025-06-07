@@ -31,11 +31,10 @@ const Index = () => {
           {/* Enhanced Header with animations */}
           <div className="text-center mb-8 animate-fade-in">
             <h1 className="text-4xl md:text-6xl font-bold text-white mb-4 bg-gradient-to-r from-indigo-300 via-purple-300 to-cyan-300 bg-clip-text text-transparent">
-              ✨ Celestial Observatory
+              ✨ AstroHub
             </h1>
             <p className="text-lg text-slate-300 max-w-2xl mx-auto leading-relaxed animate-fade-in animation-delay-200">
-              Your AI-powered companion for discovering perfect dark skies, analyzing celestial conditions, 
-              and capturing the cosmos through your lens
+              Your AI-powered astrophotography companion
             </p>
             <div className="flex items-center justify-center gap-2 mt-4 text-slate-400 text-sm animate-fade-in animation-delay-400">
               <span>🌌</span>

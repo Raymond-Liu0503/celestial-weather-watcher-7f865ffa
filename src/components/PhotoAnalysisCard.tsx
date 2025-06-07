@@ -29,7 +29,7 @@ const PhotoAnalysisCard = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const MAX_API_CALLS = 5; // Limit to 5 analyses per session
-  const MAX_DAILY_UPLOADS = 50; // Limit to 50 uploads per day
+  const MAX_DAILY_UPLOADS = 5; // Limit to 50 uploads per day
   const MAX_FILE_SIZE = 500 * 1024 * 1024; // 500MB in bytes
 
   const updateDailyUploads = (count: number) => {
