@@ -55,30 +55,30 @@ const Index = () => {
           </div>
 
           {/* Dashboard Layout */}
-          <div className="max-w-7xl mx-auto space-y-6">
-            {/* Top Row - 5 Equally Sized Cards */}
+          <div className="max-w-7xl mx-auto space-y-8">
+            {/* Top Row - 5 Equal Cards with Fixed Height */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
-              <div className="animate-fade-in animation-delay-800 h-full">
+              <div className="animate-fade-in animation-delay-800">
                 <div className="h-80">
                   <WeatherCard />
                 </div>
               </div>
-              <div className="animate-fade-in animation-delay-1000 h-full">
+              <div className="animate-fade-in animation-delay-1000">
                 <div className="h-80">
                   <MoonPhaseCard />
                 </div>
               </div>
-              <div className="animate-fade-in animation-delay-1200 h-full">
+              <div className="animate-fade-in animation-delay-1200">
                 <div className="h-80">
                   <StargazingCard />
                 </div>
               </div>
-              <div className="animate-fade-in animation-delay-1400 h-full">
+              <div className="animate-fade-in animation-delay-1400">
                 <div className="h-80">
                   <ForecastCard />
                 </div>
               </div>
-              <div className="animate-fade-in animation-delay-1600 h-full">
+              <div className="animate-fade-in animation-delay-1600">
                 <div className="h-80">
                   <AstrophotographyCard />
                 </div>
