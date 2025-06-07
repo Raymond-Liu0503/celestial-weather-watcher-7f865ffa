@@ -3,13 +3,16 @@ import { Camera, MapPin, Star, Filter } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useLocation } from '../contexts/LocationContext';
+import { supabase } from '@/lib/supabase';
 
 interface AstroLocation {
+  id: string;
   name: string;
   distance: number;
-  darkSkyRating: number;
+  dark_sky_rating: number;
   description: string;
   coordinates: { lat: number; lon: number };
+  created_at: string;
 }
 
 const AstrophotographyCard = () => {
@@ -48,80 +51,32 @@ const AstrophotographyCard = () => {
     setLoading(true);
     
     try {
-      // Generate suggested locations based on the user's location
-      // In a real app, this would query a database of dark sky locations
-      const suggestions = generateLocationSuggestions(location);
-      setAstroLocations(suggestions);
+      // Fetch locations from Supabase
+      const { data, error } = await supabase
+        .from('astro_locations')
+        .select('*')
+        .order('dark_sky_rating', { ascending: false });
+
+      if (error) throw error;
+
+      // Calculate distances and add them to the locations
+      const locationsWithDistance = data.map(loc => ({
+        ...loc,
+        distance: calculateDistance(
+          location.lat,
+          location.lon,
+          loc.coordinates.lat,
+          loc.coordinates.lon
+        )
+      }));
+
+      setAstroLocations(locationsWithDistance);
       
     } catch (error) {
       console.error('Error finding astrophotography locations:', error);
     } finally {
       setLoading(false);
     }
-  };
-
-  const generateLocationSuggestions = (userLocation: { lat: number; lon: number; name: string }) => {
-    // This is a simplified version - in reality, you'd have a database of dark sky locations
-    const suggestions: AstroLocation[] = [
-      {
-        name: 'National Park Observatory',
-        distance: calculateDistance(userLocation.lat, userLocation.lon, userLocation.lat + 0.5, userLocation.lon + 0.3),
-        darkSkyRating: 9,
-        description: 'Designated Dark Sky area with minimal light pollution',
-        coordinates: { lat: userLocation.lat + 0.5, lon: userLocation.lon + 0.3 }
-      },
-      {
-        name: 'Mountain Peak Lookout',
-        distance: calculateDistance(userLocation.lat, userLocation.lon, userLocation.lat - 0.3, userLocation.lon + 0.4),
-        darkSkyRating: 8,
-        description: 'High elevation site with excellent horizon views',
-        coordinates: { lat: userLocation.lat - 0.3, lon: userLocation.lon + 0.4 }
-      },
-      {
-        name: 'Rural Observatory Site',
-        distance: calculateDistance(userLocation.lat, userLocation.lon, userLocation.lat + 0.2, userLocation.lon - 0.6),
-        darkSkyRating: 7,
-        description: 'Remote location away from city lights',
-        coordinates: { lat: userLocation.lat + 0.2, lon: userLocation.lon - 0.6 }
-      },
-      {
-        name: 'Desert Viewing Area',
-        distance: calculateDistance(userLocation.lat, userLocation.lon, userLocation.lat - 0.4, userLocation.lon - 0.2),
-        darkSkyRating: 9,
-        description: 'Dry climate with exceptional atmospheric clarity',
-        coordinates: { lat: userLocation.lat - 0.4, lon: userLocation.lon - 0.2 }
-      },
-      {
-        name: 'Lakeside Dark Zone',
-        distance: calculateDistance(userLocation.lat, userLocation.lon, userLocation.lat + 0.6, userLocation.lon - 0.1),
-        darkSkyRating: 6,
-        description: 'Peaceful location with good northern sky access',
-        coordinates: { lat: userLocation.lat + 0.6, lon: userLocation.lon - 0.1 }
-      },
-      {
-        name: 'Remote Mountain Reserve',
-        distance: calculateDistance(userLocation.lat, userLocation.lon, userLocation.lat + 1.2, userLocation.lon + 0.8),
-        darkSkyRating: 10,
-        description: 'Pristine dark skies at high altitude',
-        coordinates: { lat: userLocation.lat + 1.2, lon: userLocation.lon + 0.8 }
-      },
-      {
-        name: 'Coastal Observatory',
-        distance: calculateDistance(userLocation.lat, userLocation.lon, userLocation.lat - 0.8, userLocation.lon + 1.1),
-        darkSkyRating: 7,
-        description: 'Ocean views with minimal eastern light pollution',
-        coordinates: { lat: userLocation.lat - 0.8, lon: userLocation.lon + 1.1 }
-      }
-    ];
-
-    // Sort by a combination of dark sky rating and proximity
-    return suggestions
-      .map(loc => ({
-        ...loc,
-        score: (loc.darkSkyRating / 10) * 0.7 + (100 / (loc.distance + 10)) * 0.3
-      }))
-      .sort((a, b) => b.score - a.score)
-      .map(({ score, ...loc }) => loc);
   };
 
   const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number) => {
@@ -226,9 +181,9 @@ const AstrophotographyCard = () => {
                 </Button>
               </div>
             ) : (
-              filteredLocations.map((loc, index) => (
+              filteredLocations.map((loc) => (
                 <div 
-                  key={index} 
+                  key={loc.id} 
                   className="bg-slate-800/20 rounded-lg p-4 hover:bg-slate-800/40 transition-colors cursor-pointer border border-slate-700/30"
                   onClick={() => openInMaps(loc.coordinates)}
                 >
@@ -238,9 +193,9 @@ const AstrophotographyCard = () => {
                       <h4 className="font-semibold">{loc.name}</h4>
                     </div>
                     <div className="flex items-center gap-2">
-                      <Star className={`w-4 h-4 ${getRatingColor(loc.darkSkyRating)}`} />
-                      <span className={`text-sm font-medium ${getRatingColor(loc.darkSkyRating)}`}>
-                        {loc.darkSkyRating}/10
+                      <Star className={`w-4 h-4 ${getRatingColor(loc.dark_sky_rating)}`} />
+                      <span className={`text-sm font-medium ${getRatingColor(loc.dark_sky_rating)}`}>
+                        {loc.dark_sky_rating}/10
                       </span>
                     </div>
                   </div>

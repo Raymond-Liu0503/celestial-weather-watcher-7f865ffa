@@ -5,18 +5,8 @@ import { Button } from '@/components/ui/button';
 import { useLocation } from '../contexts/LocationContext';
 import { toast } from '@/hooks/use-toast';
 
-interface CompositionSuggestion {
-  type: string;
-  description: string;
-  tip: string;
-  confidence?: number;
-}
-
 interface AIAnalysisResult {
-  overallQuality: number;
-  suggestions: CompositionSuggestion[];
-  detectedElements: string[];
-  improvementAreas: string[];
+  text: string;
 }
 
 const PhotoAnalysisCard = () => {
@@ -39,7 +29,7 @@ const PhotoAnalysisCard = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const MAX_API_CALLS = 5; // Limit to 5 analyses per session
-  const MAX_DAILY_UPLOADS = 10; // Limit to 10 uploads per day
+  const MAX_DAILY_UPLOADS = 50; // Limit to 50 uploads per day
   const MAX_FILE_SIZE = 500 * 1024 * 1024; // 500MB in bytes
 
   const updateDailyUploads = (count: number) => {
@@ -49,11 +39,17 @@ const PhotoAnalysisCard = () => {
   };
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    console.log('handleImageUpload called');
     const file = event.target.files?.[0];
-    if (!file) return;
+    if (!file) {
+      console.log('No file selected');
+      return;
+    }
+    console.log('File selected:', file.name, file.size);
 
     // Check daily upload limit
     if (dailyUploads >= MAX_DAILY_UPLOADS) {
+      console.log('Daily upload limit reached');
       toast({
         title: "Daily Upload Limit Reached",
         description: `You've reached the daily limit of ${MAX_DAILY_UPLOADS} photo uploads. Try again tomorrow.`,
@@ -64,6 +60,7 @@ const PhotoAnalysisCard = () => {
 
     // Check file size limit
     if (file.size > MAX_FILE_SIZE) {
+      console.log('File too large:', file.size);
       toast({
         title: "File Too Large",
         description: `File size must be under 500MB. Your file is ${(file.size / (1024 * 1024)).toFixed(1)}MB.`,
@@ -74,6 +71,7 @@ const PhotoAnalysisCard = () => {
 
     // Check API call limit
     if (apiCallsUsed >= MAX_API_CALLS) {
+      console.log('API call limit reached');
       toast({
         title: "API Limit Reached",
         description: `You've used all ${MAX_API_CALLS} photo analyses for this session. Refresh the page to reset.`,
@@ -82,26 +80,56 @@ const PhotoAnalysisCard = () => {
       return;
     }
 
+    console.log('Starting file read');
     const reader = new FileReader();
     reader.onload = (e) => {
+      console.log('File read complete');
       const imageUrl = e.target?.result as string;
+      console.log('Image URL length:', imageUrl.length);
       setUploadedImage(imageUrl);
       
       // Update daily upload count
       updateDailyUploads(dailyUploads + 1);
       
+      console.log('Calling analyzePhotoWithAI');
       analyzePhotoWithAI(imageUrl);
+    };
+    reader.onerror = (error) => {
+      console.error('Error reading file:', error);
     };
     reader.readAsDataURL(file);
   };
 
   const analyzePhotoWithAI = async (imageUrl: string) => {
+    console.log('analyzePhotoWithAI called');
     setAnalyzing(true);
     
     try {
-      // Simulate AI analysis with more detailed feedback
-      const analysisResult = await performAIAnalysis(imageUrl);
-      setAiAnalysis(analysisResult);
+      console.log('Starting photo analysis...');
+      const response = await fetch('http://localhost:3001/api/analyze-photo', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ imageBase64: imageUrl }),
+        signal: AbortSignal.timeout(180000)
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to analyze photo');
+      }
+
+      const data = await response.json();
+      console.log('Received API response:', data);
+      
+      // Store the raw analysis text
+      const analysis = data.output.text;
+      console.log('Analysis text:', analysis);
+      
+      setAiAnalysis({
+        text: analysis
+      });
       
       // Update API call count
       const newCount = apiCallsUsed + 1;
@@ -114,84 +142,16 @@ const PhotoAnalysisCard = () => {
       });
       
     } catch (error) {
-      console.error('Error analyzing photo:', error);
+      console.error('Error in AI analysis:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
       toast({
         title: "Analysis Failed",
-        description: "Unable to analyze the photo. Please try again.",
+        description: `Unable to analyze the photo: ${errorMessage}`,
         variant: "destructive",
       });
     } finally {
       setAnalyzing(false);
     }
-  };
-
-  const performAIAnalysis = async (imageUrl: string): Promise<AIAnalysisResult> => {
-    // Simulate AI processing time
-    await new Promise(resolve => setTimeout(resolve, 3000));
-    
-    // Simulate AI analysis results based on image characteristics
-    const mockAnalysis: AIAnalysisResult = {
-      overallQuality: Math.floor(Math.random() * 3) + 7, // 7-9 rating
-      detectedElements: [
-        'Night sky',
-        'Stars visible',
-        'Foreground silhouette',
-        'Horizon line',
-        'Possible light pollution'
-      ],
-      improvementAreas: [
-        'Reduce light pollution impact',
-        'Enhance star visibility',
-        'Improve foreground composition',
-        'Adjust exposure balance'
-      ],
-      suggestions: [
-        {
-          type: "Star Trail Optimization",
-          description: "Your star trails could be enhanced with longer exposure times",
-          tip: "Try 4-6 minute exposures for more pronounced trails",
-          confidence: 85
-        },
-        {
-          type: "Foreground Balance",
-          description: "The foreground silhouette creates good contrast but could be repositioned",
-          tip: "Position the horizon on the lower third line for better composition",
-          confidence: 92
-        },
-        {
-          type: "Focus Stacking",
-          description: "Consider focus stacking for sharper stars and foreground",
-          tip: "Take multiple shots with different focus points and blend in post",
-          confidence: 78
-        },
-        {
-          type: "Light Pollution Mitigation",
-          description: "Some light pollution detected in the lower portion",
-          tip: "Use a light pollution filter or adjust white balance in post-processing",
-          confidence: 88
-        }
-      ]
-    };
-
-    // Add location-specific suggestions if available
-    if (stargazingConditions) {
-      if (stargazingConditions.rating >= 8) {
-        mockAnalysis.suggestions.push({
-          type: "Milky Way Capture",
-          description: "Excellent conditions detected for Milky Way photography",
-          tip: "Face south after 10 PM for the galactic core",
-          confidence: 95
-        });
-      }
-    }
-
-    return mockAnalysis;
-  };
-
-  const getQualityColor = (rating: number) => {
-    if (rating >= 8) return 'text-emerald-400';
-    if (rating >= 6) return 'text-yellow-400';
-    return 'text-orange-400';
   };
 
   const getLocationSpecificTips = () => {
@@ -303,50 +263,13 @@ const PhotoAnalysisCard = () => {
           {/* AI Analysis Results */}
           {aiAnalysis && (
             <div className="space-y-4">
-              <div className="bg-slate-800/50 rounded-lg p-4 border border-slate-600">
-                <h4 className="text-lg font-semibold text-indigo-400 mb-2">AI Analysis Results</h4>
-                <div className="flex items-center gap-4 mb-3">
-                  <div className={`text-2xl font-bold ${getQualityColor(aiAnalysis.overallQuality)}`}>
-                    {aiAnalysis.overallQuality}/10
-                  </div>
-                  <span className="text-slate-300">Overall Quality Score</span>
-                </div>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <h5 className="text-sm text-slate-400 mb-2">Detected Elements</h5>
-                    <ul className="space-y-1">
-                      {aiAnalysis.detectedElements.map((element, index) => (
-                        <li key={index} className="text-xs text-slate-300">• {element}</li>
-                      ))}
-                    </ul>
-                  </div>
-                  
-                  <div>
-                    <h5 className="text-sm text-slate-400 mb-2">Improvement Areas</h5>
-                    <ul className="space-y-1">
-                      {aiAnalysis.improvementAreas.map((area, index) => (
-                        <li key={index} className="text-xs text-slate-300">• {area}</li>
-                      ))}
-                    </ul>
+              <div className="bg-slate-800/50 rounded-lg p-6 border border-slate-600">
+                <h4 className="text-lg font-semibold text-indigo-400 mb-4">AI Analysis Results</h4>
+                <div className="prose prose-invert max-w-none">
+                  <div className="text-slate-300 whitespace-pre-line">
+                    {aiAnalysis.text}
                   </div>
                 </div>
-              </div>
-
-              <div className="space-y-3">
-                <h4 className="text-lg font-semibold text-indigo-400">AI Composition Suggestions</h4>
-                {aiAnalysis.suggestions.map((suggestion, index) => (
-                  <div key={index} className="bg-slate-800/30 rounded-lg p-4 border border-slate-600">
-                    <div className="flex items-start justify-between mb-2">
-                      <h5 className="font-semibold text-white">{suggestion.type}</h5>
-                      {suggestion.confidence && (
-                        <span className="text-xs text-emerald-400">{suggestion.confidence}% confidence</span>
-                      )}
-                    </div>
-                    <p className="text-slate-300 text-sm mb-2">{suggestion.description}</p>
-                    <p className="text-indigo-300 text-xs italic">💡 {suggestion.tip}</p>
-                  </div>
-                ))}
               </div>
             </div>
           )}
