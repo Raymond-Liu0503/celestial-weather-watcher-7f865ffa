@@ -75,8 +75,8 @@ const ForecastCard = () => {
 
   if (!location) {
     return (
-      <Card className="bg-white/10 backdrop-blur-md border-white/20 text-white h-full">
-        <CardContent className="p-4 text-center flex flex-col items-center justify-center h-full">
+      <Card className="bg-white/10 backdrop-blur-md border-white/20 text-white">
+        <CardContent className="p-4 text-center flex flex-col items-center justify-center">
           <Calendar className="w-8 h-8 mb-2 text-gray-400" />
           <p className="text-gray-300 text-sm">Search for location</p>
         </CardContent>
@@ -85,7 +85,7 @@ const ForecastCard = () => {
   }
 
   return (
-    <Card className="bg-white/10 backdrop-blur-md border-white/20 text-white hover:bg-white/15 transition-all duration-300 h-full flex flex-col">
+    <Card className="bg-white/10 backdrop-blur-md border-white/20 text-white hover:bg-white/15 transition-all duration-300">
       <CardHeader className="pb-2">
         <CardTitle className="flex items-center gap-2 text-lg">
           <Calendar className="w-5 h-5 text-blue-400" />
@@ -93,7 +93,7 @@ const ForecastCard = () => {
         </CardTitle>
         <p className="text-gray-300 text-xs truncate">{location.name}</p>
       </CardHeader>
-      <CardContent className="flex-1 overflow-hidden">
+      <CardContent className="pb-4">
         {loading ? (
           <div className="space-y-2 animate-pulse">
             {[...Array(5)].map((_, i) => (
