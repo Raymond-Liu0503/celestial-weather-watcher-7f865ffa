@@ -59,16 +59,22 @@ const AstrophotographyCard = () => {
 
       if (error) throw error;
 
-      // Calculate distances and add them to the locations
-      const locationsWithDistance = data.map(loc => ({
-        ...loc,
-        distance: calculateDistance(
-          location.lat,
-          location.lon,
-          loc.coordinates.lat,
-          loc.coordinates.lon
-        )
-      }));
+      // Calculate distances and add them to the locations with proper type casting
+      const locationsWithDistance = data.map(loc => {
+        // Safely cast the coordinates from Json to the expected type
+        const coordinates = loc.coordinates as { lat: number; lon: number };
+        
+        return {
+          ...loc,
+          coordinates,
+          distance: calculateDistance(
+            location.lat,
+            location.lon,
+            coordinates.lat,
+            coordinates.lon
+          )
+        } as AstroLocation;
+      });
 
       setAstroLocations(locationsWithDistance);
       
