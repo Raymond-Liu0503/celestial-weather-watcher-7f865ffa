@@ -82,7 +82,7 @@ const MoonPhaseCard = () => {
   };
 
   const getMoonIcon = () => {
-    if (!moonData) return <Moon className="w-8 h-8" />;
+    if (!moonData) return <Moon className="w-5 h-5" />;
     
     const illumination = moonData.illumination;
     let moonColor = 'text-gray-300';
@@ -93,67 +93,66 @@ const MoonPhaseCard = () => {
       moonColor = 'text-gray-200';
     }
     
-    return <Moon className={`w-8 h-8 ${moonColor}`} />;
+    return <Moon className={`w-5 h-5 ${moonColor}`} />;
   };
 
   if (!location) {
     return (
-      <Card className="bg-white/10 backdrop-blur-md border-white/20 text-white card-hover">
-        <CardContent className="p-8 text-center">
-          <Moon className="w-16 h-16 mx-auto mb-4 text-gray-400" />
-          <p className="text-gray-300">Search for a location to view lunar data</p>
+      <Card className="bg-white/10 backdrop-blur-md border-white/20 text-white">
+        <CardContent className="p-4 text-center">
+          <Moon className="w-8 h-8 mx-auto mb-2 text-gray-400" />
+          <p className="text-gray-300 text-sm">Search for location</p>
         </CardContent>
       </Card>
     );
   }
 
   return (
-    <Card className="bg-white/10 backdrop-blur-md border-white/20 text-white hover:bg-white/15 transition-all duration-300 card-hover">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-xl">
+    <Card className="bg-white/10 backdrop-blur-md border-white/20 text-white hover:bg-white/15 transition-all duration-300">
+      <CardHeader className="pb-2">
+        <CardTitle className="flex items-center gap-2 text-lg">
           {getMoonIcon()}
           Lunar Phase
         </CardTitle>
-        <p className="text-gray-300 text-sm">{location.name}</p>
+        <p className="text-gray-300 text-xs truncate">{location.name}</p>
       </CardHeader>
-      <CardContent>
+      <CardContent className="pb-3">
         {loading ? (
-          <div className="space-y-4 animate-pulse">
-            <div className="h-8 bg-white/20 rounded"></div>
-            <div className="h-4 bg-white/20 rounded w-3/4"></div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="h-16 bg-white/20 rounded"></div>
-              <div className="h-16 bg-white/20 rounded"></div>
+          <div className="space-y-2 animate-pulse">
+            <div className="h-6 bg-white/20 rounded"></div>
+            <div className="grid grid-cols-2 gap-2">
+              <div className="h-8 bg-white/20 rounded"></div>
+              <div className="h-8 bg-white/20 rounded"></div>
             </div>
           </div>
         ) : moonData ? (
-          <div className="space-y-4">
-            <div className="text-center mb-6">
-              <div className="relative w-24 h-24 mx-auto mb-4">
-                <div className="w-24 h-24 rounded-full bg-gray-600 relative overflow-hidden">
+          <div className="space-y-3">
+            <div className="text-center">
+              <div className="relative w-12 h-12 mx-auto mb-2">
+                <div className="w-12 h-12 rounded-full bg-gray-600 relative overflow-hidden">
                   <div 
                     className="absolute top-0 right-0 h-full bg-gradient-to-l from-yellow-200 to-yellow-100 rounded-full transition-all duration-500"
                     style={{ width: `${moonData.illumination}%` }}
                   />
                 </div>
               </div>
-              <h3 className="text-2xl font-bold text-yellow-200">{moonData.phase}</h3>
+              <h3 className="text-lg font-bold text-yellow-200">{moonData.phase}</h3>
             </div>
             
-            <div className="grid grid-cols-2 gap-4">
-              <div className="bg-white/5 rounded-lg p-4 text-center hover:bg-white/10 transition-colors">
-                <h4 className="text-sm text-gray-400 mb-1">Illumination</h4>
-                <span className="text-xl font-semibold">{moonData.illumination}%</span>
+            <div className="grid grid-cols-2 gap-2 text-xs">
+              <div className="bg-white/5 rounded p-2 text-center hover:bg-white/10 transition-colors">
+                <div className="font-semibold">{moonData.illumination}%</div>
+                <div className="text-gray-400">Illumination</div>
               </div>
               
-              <div className="bg-white/5 rounded-lg p-4 text-center hover:bg-white/10 transition-colors">
-                <h4 className="text-sm text-gray-400 mb-1">Age</h4>
-                <span className="text-xl font-semibold">{moonData.age} days</span>
+              <div className="bg-white/5 rounded p-2 text-center hover:bg-white/10 transition-colors">
+                <div className="font-semibold">{moonData.age} days</div>
+                <div className="text-gray-400">Age</div>
               </div>
             </div>
           </div>
         ) : (
-          <p className="text-gray-300 text-center py-4">No lunar data available</p>
+          <p className="text-gray-300 text-center py-2 text-sm">No lunar data available</p>
         )}
       </CardContent>
     </Card>
