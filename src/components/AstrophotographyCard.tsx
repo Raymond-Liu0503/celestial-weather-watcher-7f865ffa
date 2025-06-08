@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { Camera, MapPin, Star, Filter } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -24,11 +25,11 @@ const AstrophotographyCard = () => {
   const [showFilters, setShowFilters] = useState(false);
 
   const distanceOptions = [
-    { value: 50, label: 'Within 50km' },
-    { value: 100, label: 'Within 100km' },
-    { value: 200, label: 'Within 200km' },
-    { value: 500, label: 'Within 500km' },
-    { value: 1000, label: 'No limit' }
+    { value: 50, label: '50km' },
+    { value: 100, label: '100km' },
+    { value: 200, label: '200km' },
+    { value: 500, label: '500km' },
+    { value: 1000, label: 'All' }
   ];
 
   useEffect(() => {
@@ -143,14 +144,14 @@ const AstrophotographyCard = () => {
         {showFilters && (
           <div className="mb-4 p-3 bg-slate-800/30 rounded-lg border border-slate-600">
             <h4 className="text-sm text-slate-400 mb-2">Distance Filter</h4>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+            <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
               {distanceOptions.map((option) => (
                 <Button
                   key={option.value}
                   onClick={() => setDistanceFilter(option.value)}
                   variant={distanceFilter === option.value ? "default" : "outline"}
                   size="sm"
-                  className={`text-xs ${
+                  className={`text-xs px-2 py-1 ${
                     distanceFilter === option.value
                       ? 'bg-indigo-600 hover:bg-indigo-700'
                       : 'bg-slate-800/30 border-slate-600 text-slate-300 hover:bg-slate-700/50'
