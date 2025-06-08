@@ -65,11 +65,11 @@ const ForecastCard = () => {
 
   const getWeatherIcon = (cloudCover: number) => {
     if (cloudCover < 20) {
-      return <Sun className="w-3 h-3 text-yellow-400" />;
+      return <Sun className="w-4 h-4 text-yellow-400" />;
     } else if (cloudCover < 50) {
-      return <Cloud className="w-3 h-3 text-gray-300" />;
+      return <Cloud className="w-4 h-4 text-gray-300" />;
     } else {
-      return <CloudRain className="w-3 h-3 text-gray-400" />;
+      return <CloudRain className="w-4 h-4 text-gray-400" />;
     }
   };
 
@@ -93,17 +93,17 @@ const ForecastCard = () => {
         </CardTitle>
         <p className="text-gray-300 text-xs truncate">{location.name}</p>
       </CardHeader>
-      <CardContent className="pb-3">
+      <CardContent className="pb-4">
         {loading ? (
-          <div className="space-y-1 animate-pulse">
+          <div className="space-y-2 animate-pulse">
             {[...Array(5)].map((_, i) => (
-              <div key={i} className="h-6 bg-white/20 rounded"></div>
+              <div key={i} className="h-8 bg-white/20 rounded"></div>
             ))}
           </div>
         ) : (
           <div className="space-y-1">
             {forecast.map((day, index) => (
-              <div key={index} className="flex items-center justify-between p-1.5 bg-white/5 rounded text-xs">
+              <div key={index} className="flex items-center justify-between p-2 bg-white/5 rounded text-xs">
                 <div className="flex items-center gap-2">
                   {getWeatherIcon(day.cloudCover)}
                   <div>
