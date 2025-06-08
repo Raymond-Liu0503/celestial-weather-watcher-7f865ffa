@@ -53,30 +53,32 @@ const Index = () => {
             <LocationSearch />
           </div>
 
-          {/* Dashboard Layout */}
-          <div className="max-w-7xl mx-auto space-y-8">
-            {/* Top Row - 5 Cards with Wider Layout */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-5 gap-6">
-              <div className="animate-fade-in animation-delay-800">
-                <WeatherCard />
+          {/* Dashboard Layout - Two Column Layout */}
+          <div className="max-w-7xl mx-auto">
+            <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
+              {/* Left Column - Cards Stack */}
+              <div className="space-y-6">
+                <div className="animate-fade-in animation-delay-800">
+                  <WeatherCard />
+                </div>
+                <div className="animate-fade-in animation-delay-1000">
+                  <MoonPhaseCard />
+                </div>
+                <div className="animate-fade-in animation-delay-1200">
+                  <StargazingCard />
+                </div>
+                <div className="animate-fade-in animation-delay-1400">
+                  <ForecastCard />
+                </div>
+                <div className="animate-fade-in animation-delay-1600">
+                  <AstrophotographyCard />
+                </div>
               </div>
-              <div className="animate-fade-in animation-delay-1000">
-                <MoonPhaseCard />
-              </div>
-              <div className="animate-fade-in animation-delay-1200">
-                <StargazingCard />
-              </div>
-              <div className="animate-fade-in animation-delay-1400">
-                <ForecastCard />
-              </div>
-              <div className="animate-fade-in animation-delay-1600">
-                <AstrophotographyCard />
-              </div>
-            </div>
 
-            {/* Bottom Section - Large AI Photo Analysis Card */}
-            <div className="animate-fade-in animation-delay-1800">
-              <PhotoAnalysisCard />
+              {/* Right Column - AI Photo Analysis */}
+              <div className="animate-fade-in animation-delay-1800">
+                <PhotoAnalysisCard />
+              </div>
             </div>
           </div>
 
