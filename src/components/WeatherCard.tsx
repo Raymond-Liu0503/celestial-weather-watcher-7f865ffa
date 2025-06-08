@@ -54,12 +54,10 @@ const WeatherCard = () => {
       setStargazingConditions({
         rating,
         factors: {
-          moonPhase: 0, // Default value since WeatherCard doesn't handle moon phase
           cloudCover: weatherData.cloudCover,
           humidity: weatherData.humidity,
-          visibility: `${weatherData.visibility}km`, // Convert number to string with unit
+          visibility: weatherData.visibility,
         },
-        recommendation: '', // Add required recommendation property
       });
       
     } catch (error) {
@@ -95,52 +93,52 @@ const WeatherCard = () => {
 
   if (!location) {
     return (
-      <Card className="bg-white/10 backdrop-blur-md border-white/20 text-white h-32">
-        <CardContent className="p-3 text-center flex flex-col items-center justify-center h-full">
-          <Cloud className="w-6 h-6 mb-2 text-gray-400" />
-          <p className="text-gray-300 text-xs">Search for location</p>
+      <Card className="bg-white/10 backdrop-blur-md border-white/20 text-white">
+        <CardContent className="p-4 text-center flex flex-col items-center justify-center">
+          <Cloud className="w-8 h-8 mb-2 text-gray-400" />
+          <p className="text-gray-300 text-sm">Search for location</p>
         </CardContent>
       </Card>
     );
   }
 
   return (
-    <Card className="bg-white/10 backdrop-blur-md border-white/20 text-white hover:bg-white/15 transition-all duration-300 h-32">
-      <CardHeader className="pb-1">
-        <CardTitle className="flex items-center gap-2 text-sm">
-          <Cloud className="w-4 h-4 text-blue-400" />
+    <Card className="bg-white/10 backdrop-blur-md border-white/20 text-white hover:bg-white/15 transition-all duration-300">
+      <CardHeader className="pb-2">
+        <CardTitle className="flex items-center gap-2 text-lg">
+          <Cloud className="w-5 h-5 text-blue-400" />
           Weather
         </CardTitle>
         <p className="text-gray-300 text-xs truncate">{location.name}</p>
       </CardHeader>
-      <CardContent className="pb-2">
+      <CardContent className="pb-3">
         {loading ? (
-          <div className="space-y-1 animate-pulse">
-            <div className="h-4 bg-white/20 rounded"></div>
-            <div className="grid grid-cols-2 gap-1">
-              <div className="h-6 bg-white/20 rounded"></div>
-              <div className="h-6 bg-white/20 rounded"></div>
+          <div className="space-y-2 animate-pulse">
+            <div className="h-6 bg-white/20 rounded"></div>
+            <div className="grid grid-cols-2 gap-2">
+              <div className="h-8 bg-white/20 rounded"></div>
+              <div className="h-8 bg-white/20 rounded"></div>
             </div>
           </div>
         ) : weather ? (
-          <div className="space-y-2">
+          <div className="space-y-3">
             <div className="text-center">
-              <div className="text-xl font-bold">{weather.temperature}°C</div>
+              <div className="text-2xl font-bold">{weather.temperature}°C</div>
               <p className="text-xs text-gray-400">{weather.description}</p>
             </div>
             
-            <div className="grid grid-cols-3 gap-1 text-xs">
-              <div className="text-center p-1 bg-white/5 rounded">
+            <div className="grid grid-cols-3 gap-2 text-xs">
+              <div className="text-center p-2 bg-white/5 rounded">
                 <Droplets className="w-3 h-3 mx-auto mb-1 text-blue-400" />
                 <div className="font-semibold">{weather.humidity}%</div>
                 <div className="text-gray-400">Humidity</div>
               </div>
-              <div className="text-center p-1 bg-white/5 rounded">
+              <div className="text-center p-2 bg-white/5 rounded">
                 <Eye className="w-3 h-3 mx-auto mb-1 text-green-400" />
                 <div className="font-semibold">{weather.visibility}km</div>
                 <div className="text-gray-400">Visibility</div>
               </div>
-              <div className="text-center p-1 bg-white/5 rounded">
+              <div className="text-center p-2 bg-white/5 rounded">
                 <Cloud className="w-3 h-3 mx-auto mb-1 text-gray-400" />
                 <div className="font-semibold">{weather.cloudCover}%</div>
                 <div className="text-gray-400">Clouds</div>
@@ -148,7 +146,7 @@ const WeatherCard = () => {
             </div>
           </div>
         ) : (
-          <p className="text-gray-300 text-center py-2 text-xs">No weather data available</p>
+          <p className="text-gray-300 text-center py-2 text-sm">No weather data available</p>
         )}
       </CardContent>
     </Card>
