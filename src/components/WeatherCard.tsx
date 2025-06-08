@@ -54,10 +54,12 @@ const WeatherCard = () => {
       setStargazingConditions({
         rating,
         factors: {
+          moonPhase: 0, // Default value since WeatherCard doesn't handle moon phase
           cloudCover: weatherData.cloudCover,
           humidity: weatherData.humidity,
           visibility: `${weatherData.visibility}km`, // Convert number to string with unit
         },
+        recommendation: '', // Add required recommendation property
       });
       
     } catch (error) {
