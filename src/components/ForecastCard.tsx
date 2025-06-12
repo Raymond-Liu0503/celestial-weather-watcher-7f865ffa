@@ -67,52 +67,54 @@ const ForecastCard = () => {
     if (cloudCover < 20) {
       return <Sun className="w-4 h-4 text-yellow-400" />;
     } else if (cloudCover < 50) {
-      return <Cloud className="w-4 h-4 text-gray-300" />;
+      return <Cloud className="w-4 h-4 text-slate-300" />;
     } else {
-      return <CloudRain className="w-4 h-4 text-gray-400" />;
+      return <CloudRain className="w-4 h-4 text-slate-400" />;
     }
   };
 
   if (!location) {
     return (
-      <Card className="bg-white/10 backdrop-blur-md border-white/20 text-white">
-        <CardContent className="p-4 text-center flex flex-col items-center justify-center">
-          <Calendar className="w-8 h-8 mb-2 text-gray-400" />
-          <p className="text-gray-300 text-sm">Search for location</p>
+      <Card className="bg-slate-900/40 backdrop-blur-lg border-slate-700/50 text-white h-full">
+        <CardContent className="p-8 text-center flex flex-col items-center justify-center h-full min-h-[200px]">
+          <Calendar className="w-12 h-12 mb-4 text-slate-500" />
+          <p className="text-slate-400 text-sm">Search for location</p>
         </CardContent>
       </Card>
     );
   }
 
   return (
-    <Card className="bg-white/10 backdrop-blur-md border-white/20 text-white hover:bg-white/15 transition-all duration-300">
-      <CardHeader className="pb-2">
-        <CardTitle className="flex items-center gap-2 text-lg">
-          <Calendar className="w-5 h-5 text-blue-400" />
-          5-Day Forecast
+    <Card className="bg-slate-900/40 backdrop-blur-lg border-slate-700/50 text-white hover:bg-slate-900/60 transition-all duration-300 h-full">
+      <CardHeader className="pb-4">
+        <CardTitle className="flex items-center gap-3 text-lg font-semibold">
+          <Calendar className="w-6 h-6 text-blue-400" />
+          <div>
+            <div>5-Day Forecast</div>
+            <p className="text-slate-400 text-sm font-normal truncate">{location.name}</p>
+          </div>
         </CardTitle>
-        <p className="text-gray-300 text-xs truncate">{location.name}</p>
       </CardHeader>
-      <CardContent className="pb-4">
+      <CardContent>
         {loading ? (
           <div className="space-y-2 animate-pulse">
             {[...Array(5)].map((_, i) => (
-              <div key={i} className="h-8 bg-white/20 rounded"></div>
+              <div key={i} className="h-8 bg-slate-800/50 rounded"></div>
             ))}
           </div>
         ) : (
-          <div className="space-y-1">
+          <div className="space-y-2">
             {forecast.map((day, index) => (
-              <div key={index} className="flex items-center justify-between p-2 bg-white/5 rounded text-xs">
-                <div className="flex items-center gap-2">
+              <div key={index} className="flex items-center justify-between p-3 bg-slate-800/20 rounded-lg hover:bg-slate-800/30 transition-colors">
+                <div className="flex items-center gap-3">
                   {getWeatherIcon(day.cloudCover)}
                   <div>
-                    <p className="font-medium">{day.date}</p>
-                    <p className="text-gray-400 text-xs">{day.cloudCover}%</p>
+                    <p className="font-medium text-sm">{day.date}</p>
+                    <p className="text-slate-500 text-xs">{day.cloudCover}% clouds</p>
                   </div>
                 </div>
                 <div className="text-right">
-                  <p className="font-semibold">{day.maxTemp}°/{day.minTemp}°</p>
+                  <p className="font-semibold text-sm">{day.maxTemp}°/{day.minTemp}°</p>
                 </div>
               </div>
             ))}

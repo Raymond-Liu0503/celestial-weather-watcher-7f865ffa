@@ -183,70 +183,82 @@ const StargazingCard = () => {
     return 'text-red-400';
   };
 
+  const getRatingBg = (rating: number) => {
+    if (rating >= 8) return 'bg-green-500/20 border-green-500/30';
+    if (rating >= 6) return 'bg-yellow-500/20 border-yellow-500/30';
+    if (rating >= 4) return 'bg-orange-500/20 border-orange-500/30';
+    return 'bg-red-500/20 border-red-500/30';
+  };
+
   if (!location) {
     return (
-      <Card className="bg-white/10 backdrop-blur-md border-white/20 text-white">
-        <CardContent className="p-8 text-center">
-          <Star className="w-16 h-16 mx-auto mb-4 text-gray-400" />
-          <p className="text-gray-300">Search for a location to analyze stargazing conditions</p>
+      <Card className="bg-slate-900/40 backdrop-blur-lg border-slate-700/50 text-white h-full">
+        <CardContent className="p-8 text-center flex flex-col items-center justify-center h-full min-h-[200px]">
+          <Star className="w-12 h-12 mb-4 text-slate-500" />
+          <p className="text-slate-400 text-sm">Search for a location to analyze stargazing conditions</p>
         </CardContent>
       </Card>
     );
   }
 
   return (
-    <Card className="bg-white/10 backdrop-blur-md border-white/20 text-white hover:bg-white/15 transition-all duration-300">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-xl">
-          <Star className="w-8 h-8 text-yellow-400" />
-          Stargazing Conditions
+    <Card className="bg-slate-900/40 backdrop-blur-lg border-slate-700/50 text-white hover:bg-slate-900/60 transition-all duration-300 h-full">
+      <CardHeader className="pb-4">
+        <CardTitle className="flex items-center gap-3 text-lg font-semibold">
+          <Star className="w-6 h-6 text-yellow-400" />
+          <div>
+            <div>Stargazing Tonight</div>
+            <p className="text-slate-400 text-sm font-normal truncate">{location.name}</p>
+          </div>
         </CardTitle>
-        <p className="text-gray-300 text-sm">{location.name}</p>
       </CardHeader>
-      <CardContent>
+      <CardContent className="space-y-4">
         {loading ? (
-          <div className="space-y-4 animate-pulse">
-            <div className="h-8 bg-white/20 rounded"></div>
-            <div className="h-4 bg-white/20 rounded w-3/4"></div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="h-16 bg-white/20 rounded"></div>
-              <div className="h-16 bg-white/20 rounded"></div>
+          <div className="space-y-3 animate-pulse">
+            <div className="h-8 bg-slate-800/50 rounded"></div>
+            <div className="h-4 bg-slate-800/50 rounded w-3/4"></div>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="h-12 bg-slate-800/50 rounded"></div>
+              <div className="h-12 bg-slate-800/50 rounded"></div>
             </div>
           </div>
         ) : stargazingData ? (
-          <div className="space-y-4">
-            <div className="text-center mb-6">
-              <div className={`text-4xl font-bold mb-2 ${getRatingColor(stargazingData.rating)}`}>
+          <>
+            {/* Rating Display */}
+            <div className={`text-center p-4 rounded-lg border ${getRatingBg(stargazingData.rating)}`}>
+              <div className={`text-3xl font-bold mb-1 ${getRatingColor(stargazingData.rating)}`}>
                 {stargazingData.rating}/10
               </div>
-              <p className="text-gray-300">{stargazingData.recommendation}</p>
+              <p className="text-xs text-slate-300 leading-relaxed">
+                {stargazingData.recommendation}
+              </p>
             </div>
             
-            <div className="grid grid-cols-2 gap-4">
-              <div className="bg-white/5 rounded-lg p-4">
-                <h4 className="text-sm text-gray-400 mb-1">Moon Phase</h4>
-                <div className="flex items-center gap-2">
-                  <span className="text-lg font-semibold">{stargazingData.moonPhase}</span>
-                </div>
-                <span className="text-sm text-gray-400">{stargazingData.moonIllumination}% illuminated</span>
+            {/* Conditions Grid */}
+            <div className="grid grid-cols-2 gap-3">
+              <div className="bg-slate-800/30 rounded-lg p-3">
+                <h4 className="text-xs text-slate-500 mb-1">Moon Phase</h4>
+                <div className="text-sm font-medium">{stargazingData.moonPhase}</div>
+                <div className="text-xs text-slate-400">{stargazingData.moonIllumination}% lit</div>
               </div>
               
-              <div className="bg-white/5 rounded-lg p-4">
-                <h4 className="text-sm text-gray-400 mb-1">Cloud Cover</h4>
-                <div className="flex items-center gap-2">
-                  <CloudRain className="w-4 h-4 text-gray-300" />
-                  <span className="text-lg font-semibold">{stargazingData.cloudCover}%</span>
+              <div className="bg-slate-800/30 rounded-lg p-3">
+                <h4 className="text-xs text-slate-500 mb-1">Cloud Cover</h4>
+                <div className="flex items-center gap-1">
+                  <CloudRain className="w-3 h-3 text-slate-400" />
+                  <span className="text-sm font-medium">{stargazingData.cloudCover}%</span>
                 </div>
               </div>
             </div>
             
-            <div className="bg-white/5 rounded-lg p-4">
-              <h4 className="text-sm text-gray-400 mb-1">Best Viewing Time</h4>
-              <span className="text-lg font-semibold">{stargazingData.bestTime}</span>
+            {/* Best Time */}
+            <div className="bg-slate-800/30 rounded-lg p-3">
+              <h4 className="text-xs text-slate-500 mb-1">Best Viewing Time</h4>
+              <span className="text-sm font-medium">{stargazingData.bestTime}</span>
             </div>
-          </div>
+          </>
         ) : (
-          <p className="text-gray-300 text-center py-4">No stargazing data available</p>
+          <p className="text-slate-400 text-center py-8 text-sm">No stargazing data available</p>
         )}
       </CardContent>
     </Card>

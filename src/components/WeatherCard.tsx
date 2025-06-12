@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Cloud, CloudRain, Sun, Thermometer, Clock } from 'lucide-react';
+import { Cloud, CloudRain, Sun, Thermometer, Clock, Droplets, Wind } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useLocation } from '../contexts/LocationContext';
 import { toast } from '@/hooks/use-toast';
@@ -104,94 +104,85 @@ const WeatherCard = () => {
   };
 
   const getWeatherIcon = () => {
-    if (!weatherData) return <Cloud className="w-8 h-8" />;
+    if (!weatherData) return <Cloud className="w-6 h-6" />;
     
     if (weatherData.cloudCover > 70) {
-      return <CloudRain className="w-8 h-8 text-gray-400" />;
+      return <CloudRain className="w-6 h-6 text-slate-400" />;
     } else if (weatherData.cloudCover > 30) {
-      return <Cloud className="w-8 h-8 text-gray-300" />;
+      return <Cloud className="w-6 h-6 text-slate-300" />;
     } else {
-      return <Sun className="w-8 h-8 text-yellow-400" />;
+      return <Sun className="w-6 h-6 text-yellow-400" />;
     }
   };
 
   if (!location) {
     return (
-      <Card className="bg-white/10 backdrop-blur-md border-white/20 text-white">
-        <CardContent className="p-8 text-center">
-          <Cloud className="w-16 h-16 mx-auto mb-4 text-gray-400" />
-          <p className="text-gray-300">Search for a location to view weather data</p>
+      <Card className="bg-slate-900/40 backdrop-blur-lg border-slate-700/50 text-white h-full">
+        <CardContent className="p-8 text-center flex flex-col items-center justify-center h-full min-h-[200px]">
+          <Cloud className="w-12 h-12 mb-4 text-slate-500" />
+          <p className="text-slate-400 text-sm">Search for a location to view weather data</p>
         </CardContent>
       </Card>
     );
   }
 
   return (
-    <Card className="bg-white/10 backdrop-blur-md border-white/20 text-white hover:bg-white/15 transition-all duration-300">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-xl">
+    <Card className="bg-slate-900/40 backdrop-blur-lg border-slate-700/50 text-white hover:bg-slate-900/60 transition-all duration-300 h-full">
+      <CardHeader className="pb-4">
+        <CardTitle className="flex items-center gap-3 text-lg font-semibold">
           {getWeatherIcon()}
-          Weather Conditions
+          <div>
+            <div>Current Weather</div>
+            <p className="text-slate-400 text-sm font-normal truncate">{location.name}</p>
+          </div>
         </CardTitle>
-        <p className="text-gray-300 text-sm">{location.name}</p>
       </CardHeader>
-      <CardContent>
+      <CardContent className="space-y-4">
         {loading ? (
-          <div className="space-y-4 animate-pulse">
-            <div className="h-8 bg-white/20 rounded"></div>
-            <div className="h-4 bg-white/20 rounded w-3/4"></div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="h-16 bg-white/20 rounded"></div>
-              <div className="h-16 bg-white/20 rounded"></div>
+          <div className="space-y-3 animate-pulse">
+            <div className="h-8 bg-slate-800/50 rounded"></div>
+            <div className="h-4 bg-slate-800/50 rounded w-2/3"></div>
+            <div className="grid grid-cols-3 gap-3">
+              <div className="h-12 bg-slate-800/50 rounded"></div>
+              <div className="h-12 bg-slate-800/50 rounded"></div>
+              <div className="h-12 bg-slate-800/50 rounded"></div>
             </div>
           </div>
         ) : weatherData ? (
-          <div className="space-y-6">
-            <div className="flex items-center gap-4">
+          <>
+            {/* Temperature and Description */}
+            <div className="flex items-center gap-3 mb-4">
               <div className="flex items-center gap-2">
-                <Thermometer className="w-5 h-5 text-red-400" />
-                <span className="text-3xl font-bold">{weatherData.temperature}°C</span>
+                <Thermometer className="w-4 h-4 text-orange-400" />
+                <span className="text-2xl font-bold text-white">{weatherData.temperature}°C</span>
               </div>
             </div>
             
-            <p className="text-lg text-gray-300 capitalize">{weatherData.description}</p>
+            <p className="text-slate-300 text-sm capitalize mb-4">{weatherData.description}</p>
             
-            <div className="grid grid-cols-2 gap-4">
-              <div className="bg-white/5 rounded-lg p-4">
-                <h4 className="text-sm text-gray-400 mb-1">Cloud Cover</h4>
-                <div className="flex items-center gap-2">
-                  <Cloud className="w-4 h-4 text-gray-300" />
-                  <span className="text-xl font-semibold">{weatherData.cloudCover}%</span>
-                </div>
+            {/* Weather Stats Grid */}
+            <div className="grid grid-cols-3 gap-3">
+              <div className="bg-slate-800/30 rounded-lg p-3 text-center">
+                <Cloud className="w-4 h-4 text-slate-400 mx-auto mb-1" />
+                <div className="text-sm font-medium">{weatherData.cloudCover}%</div>
+                <div className="text-xs text-slate-500">Clouds</div>
               </div>
               
-              <div className="bg-white/5 rounded-lg p-4">
-                <h4 className="text-sm text-gray-400 mb-1">Humidity</h4>
-                <span className="text-xl font-semibold">{Math.round(weatherData.humidity)}%</span>
+              <div className="bg-slate-800/30 rounded-lg p-3 text-center">
+                <Droplets className="w-4 h-4 text-blue-400 mx-auto mb-1" />
+                <div className="text-sm font-medium">{Math.round(weatherData.humidity)}%</div>
+                <div className="text-xs text-slate-500">Humidity</div>
               </div>
-            </div>
 
-            {/* Hourly Weather for Tonight */}
-            <div className="bg-white/5 rounded-lg p-4">
-              <h4 className="text-sm text-gray-400 mb-3 flex items-center gap-2">
-                <Clock className="w-4 h-4" />
-                Tonight's Hourly Conditions
-              </h4>
-              <div className="grid grid-cols-2 gap-2 text-xs">
-                {weatherData.hourlyData.slice(0, 6).map((hour, index) => (
-                  <div key={index} className="flex justify-between items-center py-1">
-                    <span className="text-gray-300">{hour.time}</span>
-                    <div className="flex items-center gap-2">
-                      <span>{hour.temperature}°</span>
-                      <span className="text-gray-400">{hour.cloudCover}%☁</span>
-                    </div>
-                  </div>
-                ))}
+              <div className="bg-slate-800/30 rounded-lg p-3 text-center">
+                <Wind className="w-4 h-4 text-cyan-400 mx-auto mb-1" />
+                <div className="text-sm font-medium">{Math.round(weatherData.windSpeed)}</div>
+                <div className="text-xs text-slate-500">km/h</div>
               </div>
             </div>
-          </div>
+          </>
         ) : (
-          <p className="text-gray-300 text-center py-4">No weather data available</p>
+          <p className="text-slate-400 text-center py-8 text-sm">No weather data available</p>
         )}
       </CardContent>
     </Card>
