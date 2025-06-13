@@ -31,24 +31,21 @@ const Index = () => {
           {/* Enhanced Header */}
           <div className="text-center mb-12 animate-fade-in">
             <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 bg-gradient-to-r from-indigo-300 via-purple-300 to-cyan-300 bg-clip-text text-transparent leading-tight">
-              ✨ AstroHub
+              AstroHub
             </h1>
             <p className="text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed animate-fade-in animation-delay-200 mb-6">
               Your AI-powered astrophotography companion for discovering perfect stargazing conditions
             </p>
             <div className="flex items-center justify-center gap-4 text-slate-400 text-sm animate-fade-in animation-delay-400 flex-wrap">
               <div className="flex items-center gap-2">
-                <span>🌌</span>
                 <span>Real-time conditions</span>
               </div>
               <span className="hidden sm:block">•</span>
               <div className="flex items-center gap-2">
-                <span>🔭</span>
                 <span>AI photo analysis</span>
               </div>
               <span className="hidden sm:block">•</span>
               <div className="flex items-center gap-2">
-                <span>⭐</span>
                 <span>Stargazing forecasts</span>
               </div>
             </div>

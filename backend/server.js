@@ -88,14 +88,14 @@ app.post('/api/analyze-photo', async (req, res) => {
       });
     }
 
-    const promptText = `Analyze this astrophotography image and provide detailed feedback on composition, technical aspects, and suggestions for improvement. Focus on:
+    const promptText = `Analyze this astrophotography image and provide concise feedback on composition, technical aspects, and suggestions for improvement. Keep your response under 500 words. Focus on:
 1) Star visibility and focus quality
 2) Light pollution impact and mitigation
 3) Foreground composition and framing
 4) Exposure settings and contrast
 5) Overall technical quality and artistic merit
 
-Please provide specific, actionable advice for improving future astrophotography shots.`;
+Please provide specific, actionable advice for improving future astrophotography shots. Be concise and direct.`;
 
     const payload = {
       model: "qwen/qwen2.5-vl-72b-instruct:free",
@@ -116,7 +116,8 @@ Please provide specific, actionable advice for improving future astrophotography
           ]
         }
       ],
-      max_tokens: 20000
+      max_tokens: 2000,
+      temperature: 0.1,
     };
 
     console.log('Sending request to OpenRouter API...');
