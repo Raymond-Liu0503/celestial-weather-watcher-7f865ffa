@@ -13,7 +13,7 @@ const port = process.env.PORT || 3001;
 const MAX_IMAGE_SIZE_MB = 10; // Reduced from 150MB for security
 const ALLOWED_ORIGINS = process.env.ALLOWED_ORIGINS ? 
   process.env.ALLOWED_ORIGINS.split(',') : 
-  ['http://localhost:8080', 'http://localhost:5173', 'http://localhost:3000'];
+  ['http://localhost:8080', 'http://localhost:5173', 'http://localhost:3000', 'https://yourdomain.com'];
 
 // Security middleware
 app.use(helmet({
@@ -68,6 +68,12 @@ const photoAnalysisLimiter = rateLimit({
 });
 
 app.use(generalLimiter);
+
+// Add request logging middleware
+app.use((req, res, next) => {
+  console.log(`${new Date().toISOString()} - ${req.method} ${req.url} from ${req.ip}`);
+  next();
+});
 
 // Enhanced middleware with security limits
 app.use(express.json({ 

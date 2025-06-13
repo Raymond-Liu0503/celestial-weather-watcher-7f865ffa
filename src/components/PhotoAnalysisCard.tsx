@@ -85,11 +85,10 @@ const PhotoAnalysisCard = () => {
         setError(validation.error || 'Invalid image');
         setLoading(false);
         return;
-      }
-
-      console.log('Sending image for analysis...');
+      }      console.log('Sending image for analysis...');
       
-      const response = await fetch('/api/analyze-photo', {
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+      const response = await fetch(`${apiUrl}/api/analyze-photo`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
